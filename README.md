@@ -1,38 +1,57 @@
 # Depression Prediction for Kaggle Playground Series - Season 4, Episode 11
 
-This project is a machine learning solution for the Kaggle competition [Playground Series - Season 4, Episode 11](https://www.kaggle.com/competitions/playground-series-s4e11/overview). The goal of this competition is to predict depression based on a set of mental health survey data. The dataset includes various features like demographic information, mental health history, and lifestyle habits.
-
-## Problem Statement
-
-Mental health is an important factor in well-being, yet it is often underrepresented in discussions around health. The competition provides survey data to analyze the patterns and factors contributing to depression and build a predictive model for it.
-
-## Dataset
-
-The dataset consists of:
-- **Training Data:** Includes features like demographic details, mental health history, and labels indicating whether the respondent suffers from depression (`Depression` column).
-- **Test Data:** Includes similar features without the target label, used for generating predictions.
-- **Evaluation Metric:** Submissions are evaluated using `Accuracy Score`.
-
-More details about the dataset and the problem can be found on the [competition page](https://www.kaggle.com/competitions/playground-series-s4e11/overview).
+This project focuses on predicting depression based on a set of mental health survey data as part of the Kaggle competition [Playground Series - Season 4, Episode 11](https://www.kaggle.com/competitions/playground-series-s4e11/overview). Using demographic details, mental health history, and lifestyle habits, this project preprocesses the data and applies a machine learning model to generate predictions.
 
 ---
 
-## Features
+## Problem Statement
+
+The dataset provided includes mental health survey data, with features like demographic information, mental health history, and lifestyle habits. The goal is to predict whether an individual suffers from depression based on the provided features.
+
+### Evaluation Metric
+The competition uses `F1-Score` as the evaluation metric for predictions on the test set.
+
+---
+
+## Dataset Overview
+
+The dataset contains the following:
+- **Training Data (`train.csv`)**: Includes features and target labels indicating the presence of depression.
+- **Test Data (`test.csv`)**: Includes similar features, but the target label is missing and needs to be predicted.
+
+### Key Features
+- **Demographic Details**: `Gender`, `City`, `Profession`, etc.
+- **Lifestyle Habits**: `Sleep Duration`, `Dietary Habits`, etc.
+- **Mental Health History**: `Family History of Mental Illness`, `Have you ever had suicidal thoughts?`, etc.
+
+---
+
+## Features of the Project
 
 1. **Data Preprocessing:**
-   - Handles missing values by replacing them with relevant defaults (`Unknown` for non-numeric columns and `0.0` for numeric columns).
-   - Encodes categorical data using `LabelEncoder`.
-   - Processes rare categories in columns like `Profession`, `City`, and `Degree` by grouping them into "Other".
+   - Combines related features like `Work Pressure` and `Academic Pressure` into a single feature.
+   - Handles missing values:
+     - Replaces missing values in numeric columns with `0.0`.
+     - Replaces missing values in non-numeric columns with `'Unknown'`.
+   - Encodes categorical features using `LabelEncoder`.
+   - Groups rare categories in features like `City`, `Profession`, and `Degree` into `"Other"`.
+   - Drops unnecessary columns like `Name` and `CGPA`.
 
 2. **Machine Learning Model:**
-   - Uses a **Random Forest Classifier** for training and prediction.
-   - Trains the model using the processed training dataset.
-   - Evaluates the model on validation data using metrics like:
-     - Accuracy
-     - ROC AUC
-     - F1-Score
-     - Confusion Matrix
+   - A **Random Forest Classifier** is used to train and predict depression.
+   - The model is evaluated using metrics such as accuracy, F1-Score, and more.
 
-3. **Output:**
-   - Generates a `submission.csv` file containing predictions for the test dataset.
+3. **Submission File:**
+   - Generates a `submission.csv` file with predictions for the test dataset.
 
+---
+
+## Installation
+
+### Prerequisites
+- Python 3.x
+- Required libraries:
+  ```bash
+  pandas
+  numpy
+  scikit-learn
