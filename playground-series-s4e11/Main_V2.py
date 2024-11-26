@@ -16,6 +16,8 @@ print("\nColumn names and data type of each column:")
 print(df_train.dtypes)
 print("\nCheck missing values in each column:")
 print(df_train.isnull().sum())
+print("\nShape of data:")
+print(df_test.shape, '\n')
 
 # Combine 'Work Pressure' and 'Academic Pressure' into a single 'Pressure' column
 df_train['Pressure'] = df_train['Work Pressure'].fillna(df_train['Academic Pressure'])
@@ -48,7 +50,8 @@ binary_mapping = {'Yes': 1, 'No': 0, 'Male': 1, 'Female': 0}
 df_train['Gender'] = df_train['Gender'].map(binary_mapping)
 df_test['Gender'] = df_test['Gender'].map(binary_mapping)
 
-df_train['Have you ever had suicidal thoughts ?'] = df_train['Have you ever had suicidal thoughts ?'].map(binary_mapping)
+df_train['Have you ever had suicidal thoughts ?'] = df_train['Have you ever had suicidal thoughts ?'].map(
+    binary_mapping)
 df_test['Have you ever had suicidal thoughts ?'] = df_test['Have you ever had suicidal thoughts ?'].map(binary_mapping)
 
 df_train['Family History of Mental Illness'] = df_train['Family History of Mental Illness'].map(binary_mapping)
@@ -86,7 +89,6 @@ df_test['City'] = df_test['City'].apply(lambda x: 'Other' if x in rare_cities el
 # Process rare degrees
 combined_data_degree = pd.concat([df_train['Degree'], df_test['Degree']])
 degree_count = combined_data_degree.value_counts()
-degree_count.to_csv('degree_count.csv')  # Save degree counts for reference
 rare_degrees = degree_count[degree_count < 100].index
 df_train['Degree'] = df_train['Degree'].apply(lambda x: 'Other' if x in rare_degrees else x)
 df_test['Degree'] = df_test['Degree'].apply(lambda x: 'Other' if x in rare_degrees else x)
@@ -95,9 +97,23 @@ df_test['Degree'] = df_test['Degree'].apply(lambda x: 'Other' if x in rare_degre
 df_train.drop(['Name'], axis=1, inplace=True)
 df_test.drop(['Name'], axis=1, inplace=True)
 
+df_train.drop(['CGPA'], axis=1, inplace=True)
+df_test.drop(['CGPA'], axis=1, inplace=True)
+
 # Encode remaining non-numeric columns using LabelEncoder
 non_numeric_cols = df_train.select_dtypes(include='object').columns
-print('Non numeric columns:', non_numeric_cols)
+numeric_cols = df_train.select_dtypes(include=['float64']).columns
+print('\nNon numeric columns:', non_numeric_cols)
+
+# Replace NaN in numeric columns with a default float value
+df_train[numeric_cols] = df_train[numeric_cols].fillna(0.0)
+df_test[numeric_cols] = df_test[numeric_cols].fillna(0.0)
+
+# Replace NaN with 'Unknown' in non-numeric columns
+df_train[non_numeric_cols] = df_train[non_numeric_cols].fillna('Unknown')
+df_test[non_numeric_cols] = df_test[non_numeric_cols].fillna('Unknown')
+
+# Apply LabelEncoder to non-numeric columns
 label_encoder = LabelEncoder()
 for col in non_numeric_cols:
     df_train[col] = label_encoder.fit_transform(df_train[col])
@@ -121,12 +137,6 @@ y_proba = rf.predict_proba(X_test)[:, 1]
 # Calculate and display evaluation metrics
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy Score: {accuracy:.4f}")
-print("Classification Report:")
-print(classification_report(y_test, y_pred))
-print("Confusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
-roc_auc = roc_auc_score(y_test, y_proba)
-print(f"ROC AUC Score: {roc_auc:.4f}")
 
 # Prepare test data and make predictions for submission
 df_test_features = df_test.drop(['id'], axis=1)
