@@ -1,57 +1,83 @@
 # Depression Prediction for Kaggle Playground Series - Season 4, Episode 11
 
-This project focuses on predicting depression based on a set of mental health survey data as part of the Kaggle competition [Playground Series - Season 4, Episode 11](https://www.kaggle.com/competitions/playground-series-s4e11/overview). Using demographic details, mental health history, and lifestyle habits, this project preprocesses the data and applies a machine learning model to generate predictions.
+This project is part of the Kaggle competition [Playground Series - Season 4, Episode 11](https://www.kaggle.com/competitions/playground-series-s4e11/overview). The goal is to predict whether a person has depression based on survey data.
 
 ---
 
-## Problem Statement
+## Project Overview
 
-The dataset provided includes mental health survey data, with features like demographic information, mental health history, and lifestyle habits. The goal is to predict whether an individual suffers from depression based on the provided features.
+### **Dataset**
+- **Train Data:** Contains survey features and labels (`Depression` column).
+- **Test Data:** Contains survey features without labels (used for predictions).
 
-### Evaluation Metric
-The competition uses `F1-Score` as the evaluation metric for predictions on the test set.
-
----
-
-## Dataset Overview
-
-The dataset contains the following:
-- **Training Data (`train.csv`)**: Includes features and target labels indicating the presence of depression.
-- **Test Data (`test.csv`)**: Includes similar features, but the target label is missing and needs to be predicted.
-
-### Key Features
-- **Demographic Details**: `Gender`, `City`, `Profession`, etc.
-- **Lifestyle Habits**: `Sleep Duration`, `Dietary Habits`, etc.
-- **Mental Health History**: `Family History of Mental Illness`, `Have you ever had suicidal thoughts?`, etc.
-
----
-
-## Features of the Project
-
+### **Steps in the Project**
 1. **Data Preprocessing:**
-   - Combines related features like `Work Pressure` and `Academic Pressure` into a single feature.
-   - Handles missing values:
-     - Replaces missing values in numeric columns with `0.0`.
-     - Replaces missing values in non-numeric columns with `'Unknown'`.
-   - Encodes categorical features using `LabelEncoder`.
-   - Groups rare categories in features like `City`, `Profession`, and `Degree` into `"Other"`.
-   - Drops unnecessary columns like `Name` and `CGPA`.
+   - Combined related columns (e.g., `Work Pressure` + `Academic Pressure` → `Pressure`).
+   - Replaced missing values:
+     - `'Unknown'` for non-numeric columns.
+     - `0.0` for numeric columns.
+   - Encoded categorical data using `LabelEncoder`.
+   - Grouped rare categories into `"Other"` for features like `City`, `Profession`, and `Degree`.
+   - Dropped unnecessary columns (`Name` and `CGPA`).
 
-2. **Machine Learning Model:**
-   - A **Random Forest Classifier** is used to train and predict depression.
-   - The model is evaluated using metrics such as accuracy, F1-Score, and more.
+2. **Machine Learning:**
+   - Used a **Random Forest Classifier** to predict depression.
+   - Evaluated the model using accuracy and ROC AUC scores.
 
 3. **Submission File:**
-   - Generates a `submission.csv` file with predictions for the test dataset.
+   - Generated a `submission.csv` with predictions for Kaggle.
 
 ---
 
-## Installation
+## Usage
 
-### Prerequisites
-- Python 3.x
-- Required libraries:
-  ```bash
-  pandas
-  numpy
-  scikit-learn
+### **Run the Project**
+1. Place `train.csv` and `test.csv` in the project folder.
+2. Run the script:
+   ```bash
+   python main_V2.py
+   
+The script will:
+Train a model on the training data.
+Predict labels for the test data.
+Create a submission.csv file for Kaggle.
+
+File Structure:
+├── train.csv          # Training data
+├── test.csv           # Test data
+├── main.py            # Script for preprocessing, training, and prediction
+├── main_V1.py            # Script for preprocessing, training, and prediction
+├── main_V2.py            # Script for preprocessing, training, and prediction
+├── submission.csv     # Generated predictions for Kaggle
+└── README.md          # Project documentation
+
+Results
+Accuracy: Displays the percentage of correct predictions.
+Submission Format: The submission.csv file looks like this:
+
+id,Depression
+1,0
+2,1
+3,0
+
+Acknowledgements
+Kaggle: For hosting the competition.
+Scikit-learn: For tools to preprocess data and train models.
+
+How to Contribute
+If you’d like to improve this project:
+Fork the repository.
+Create a feature branch:
+bash
+git checkout -b feature-branch
+Push your changes and create a Pull Request.
+
+License
+This project is licensed under the MIT License.
+
+
+
+### **What to Do Next**
+- Copy and use this simplified version for your project.
+- Add or remove any parts you feel are unnecessary.
+- If you don’t understand something in the README, ask, and I’ll clarify or simplify further.
